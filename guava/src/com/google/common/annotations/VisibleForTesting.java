@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
-import javax.annotation.meta.When;
 
 import com.google.common.base.Objects;
 
@@ -37,10 +36,13 @@ import com.google.common.base.Objects;
 public @interface VisibleForTesting {
     Visibility original() default Visibility.PRIVATE;
 
-    // TODO This should return When.NEVER when visibility of annotated Class (or Field or Method) is narrower than original()
-    // TODO TypeQualifierValidator is only for constant value. How to validate annotated Class (or Field or Method)?
-    When when() default When.UNKNOWN;
-
+    /**
+     * An enum which represents original visibility of annotated program element.
+     * This enum helps static analysis tool to find production code which calls
+     * annotated program element illegally.
+     *
+     * @author Kengo TODA
+     */
     static enum Visibility {
         PROTECTED {
             @Override
@@ -80,7 +82,7 @@ public @interface VisibleForTesting {
                 return Objects.equal(declaringClassOf(from), declaringClassOf(to));
             }
 
-            private Object declaringClassOf(Class<?> clazz) {
+            private Class<?> declaringClassOf(Class<?> clazz) {
                 while (clazz.getDeclaringClass() != null) {
                     clazz = clazz.getDeclaringClass();
                 }
