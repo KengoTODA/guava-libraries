@@ -37,7 +37,7 @@ public @interface VisibleForTesting {
     Visibility original() default Visibility.PRIVATE;
 
     /**
-     * An enum which represents original visibility of annotated program element.
+     * Represents original visibility of annotated program element.
      * This enum helps static analysis tool to find production code which calls
      * annotated program element illegally.
      *
